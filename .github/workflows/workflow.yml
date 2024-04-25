@@ -20,7 +20,7 @@ jobs:
         uses: reggionick/s3-deploy@v4
         with:
           folder: build/outputs/ios/remotes
-          bucket: ${{ secrets.S3_BUCKET }}
+          bucket: sd4688-miniapps/news
           bucket-region: ${{ secrets.S3_BUCKET_REGION }}
           dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           invalidation: /
