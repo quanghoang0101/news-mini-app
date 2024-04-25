@@ -3,45 +3,38 @@ on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
-    environment: AWS
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    # steps:
-    #   - uses: actions/checkout@v3
-
-    #   - name: Install dependencies
-    #     run: yarn
-
-    #   - name: Build
-    #     run: yarn bundle:ios
-
-    #   - name: Deploy
-    #     uses: reggionick/s3-deploy@v4
-    #     with:
-    #       folder: build/outputs/ios/remotes
-    #       bucket: ${{ secrets.S3_BUCKET }}
-    #       bucket-region: ${{ secrets.S3_BUCKET_REGION }}
-    #       dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-    #       invalidation: /
-    #       delete-removed: true
-    #       no-cache: true
-    #       private: true
-    #       files-to-include: '{.*/**,**}'
+    environment: development
     steps:
         - name: Checkout
           uses: actions/checkout@v4
+
+        - name: Install node
+          uses: actions/setup-node@v4
+          with:
+            node-version: 18
+
         - name: Install dependencies
           run: yarn
+
+        - name: Create code-signing.pem
+          env:
+            CODE_SIGNING_KEY: ${{ secrets.CODE_SIGNING_KEY }}
+          run: echo "$CODE_SIGNING_KEY" > code-signing.pem
+
         - name: Build
           run: yarn bundle:ios
+
+        - name: Delete code-signing.pem
+          run: rm code-signing.pem
+
         - name: Configure AWS Credentials
           uses: aws-actions/configure-aws-credentials@v4
           with:
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.S3_BUCKET_REGION }}
-        - name: Deploy
+            
+        - name: Deploy #https://github.com/marketplace/actions/deploy-gatsby-to-aws-s3
           uses: jonelantha/gatsby-s3-action@v3
           with:
             dest-s3-bucket: ${{ secrets.S3_BUCKET }}
