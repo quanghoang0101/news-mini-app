@@ -47,3 +47,4 @@ jobs:
             dest-s3-bucket: ${{ secrets.S3_BUCKET }}
             cloudfront-id-to-invalidate: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
             dest-s3-path: news
+            public-source-path: ./build/outputs/ios/remotes
