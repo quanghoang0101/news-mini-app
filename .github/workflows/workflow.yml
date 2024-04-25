@@ -1,9 +1,11 @@
-name: Workflow for S3 Deploy
+name: S3 Deploy
 on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
     environment: development
+    permissions:
+      contents: write
     steps:
         - name: Checkout
           uses: actions/checkout@v4
