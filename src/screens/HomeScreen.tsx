@@ -31,6 +31,14 @@ const HomeScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text variant="titleLarge" style={styles.headerTitle}>
+          Supper App
+        </Text>
+        <Button mode="contained-tonal" onPress={showNotImplementedAlert}>
+          See All
+        </Button>
+      </View>
+      <View style={styles.header}>
+        <Text variant="titleLarge" style={styles.headerTitle}>
           Trending
         </Text>
         <Button mode="contained-tonal" onPress={showNotImplementedAlert}>
